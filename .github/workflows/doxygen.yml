@@ -1,4 +1,4 @@
-name: Generate Doxygen Documentation
+name: Generate Documentation
 
 on:
   push:
@@ -6,20 +6,17 @@ on:
       - main
 
 jobs:
-  generate-docs:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    # Проверяем репозиторий
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Устанавливаем Doxygen
     - name: Install Doxygen
-      run: sudo apt-get install -y doxygen graphviz
+      run: sudo apt-get install -y doxygen
 
-    # Генерация документации
-    - name: Generate Documentation
+    - name: Generate Doxygen documentation
       run: doxygen Doxyfile
 
     - name: Create gh-pages branch (if not exists)
@@ -27,12 +24,14 @@ jobs:
         if ! git ls-remote --exit-code origin gh-pages; then
           git checkout --orphan gh-pages
           git reset --hard
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
           git commit --allow-empty -m "Initialize gh-pages branch"
           git push origin gh-pages
         fi
-    # Размещение документации в ветке gh-pages
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./html
+        publish_dir: ./docs/html
