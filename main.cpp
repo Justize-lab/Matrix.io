@@ -1,6 +1,7 @@
 #include <iostream>
 
-int main() {
-    std::cout << "Hello, GitHub Actions!" << std::endl;
+int main1() {
+
+	std::cout << "Ошибка теста" << std::endl;  // Пропущена точка с запятой
     return 0;
 }
